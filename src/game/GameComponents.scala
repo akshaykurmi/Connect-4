@@ -10,7 +10,15 @@ object Disc extends Enumeration {
 }
 
 
-case class Position(x: Int, y: Int)
+case class Position(x: Int, y: Int) {
+    def isValid(rows: Int, columns: Int): Boolean =
+        (0 until rows contains x) && (0 until columns contains y)
+}
 
 
-case class Board(rows: Int, columns: Int, positions: List[(Disc, Position)])
+case class Board(rows: Int, columns: Int, positions: List[(Disc, Position)]) {
+    def contains(position: Position): Boolean =
+        positions forall {
+            _._2 != position
+        }
+}
