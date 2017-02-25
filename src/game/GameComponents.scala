@@ -39,6 +39,8 @@ case object Position {
 
 
 case class Board(rows: Int, columns: Int, positions: List[(Disc, Position)]) {
+    def isFull: Boolean =
+        positions.length == rows * columns
     
     def getPositionsWith(disc: Disc): List[Position] =
         positions filter {_._1 == disc} map {_._2}

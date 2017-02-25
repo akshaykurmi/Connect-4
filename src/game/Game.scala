@@ -21,4 +21,7 @@ class Game {
         Position check4InARow (board getPositionsWith disc)
     }
     
+    def isGameDraw(board: Board): Boolean = {
+        (board isFull) && !hasWon(board, RED) && !hasWon(board, YELLOW)
+    }
 }
