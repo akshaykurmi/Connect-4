@@ -17,6 +17,12 @@ case class Position(x: Int, y: Int) {
 
 
 case class Board(rows: Int, columns: Int, positions: List[(Disc, Position)]) {
+    def count(disc: Disc): Int = positions count {
+        _._1 == disc
+    }
+    
+    def isEmpty: Boolean = positions isEmpty
+    
     def contains(position: Position): Boolean =
         positions forall {
             _._2 != position
