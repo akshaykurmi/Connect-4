@@ -17,4 +17,8 @@ class Game {
         case _ => RED
     }
     
+    def hasWon(board: Board, disc: Disc): Boolean = {
+        Position check4InARow (board getPositionsWith disc)
+    }
+    
 }
