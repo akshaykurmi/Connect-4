@@ -4,10 +4,11 @@ import game.Disc.{Disc, RED, YELLOW}
 
 class Game {
     
-    def makeMove(board: Board, position: Position, disc: Disc): Board = (board, position) match {
-        case (b, p) if b contains p => b
-        case (b, p) if p isValid(b.rows, b.columns) => Board(b.rows, b.columns, (disc, position) :: b.positions)
-        case (_, _) => board
+    def makeMove(board: Board, column: Int, disc: Disc): Board = (board, column) match {
+        case (b, c) if b isColumnFull c => b
+        case (b, c) if b isColumnValid c =>
+            Board(b.rows, b.columns, (disc, b nextPositionInColumn c) :: b.positions)
+        case (b, _) => b
     }
     
     def currentPlayer(board: Board): Disc = board match {

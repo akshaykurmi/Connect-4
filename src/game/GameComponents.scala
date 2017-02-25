@@ -10,21 +10,20 @@ object Disc extends Enumeration {
 }
 
 
-case class Position(x: Int, y: Int) {
-    def isValid(rows: Int, columns: Int): Boolean =
-        (0 until rows contains x) && (0 until columns contains y)
-}
+case class Position(x: Int, y: Int)
 
 
 case class Board(rows: Int, columns: Int, positions: List[(Disc, Position)]) {
-    def count(disc: Disc): Int = positions count {
-        _._1 == disc
-    }
+    def nextPositionInColumn(column: Int): Position =
+        Position((positions count {_._2.y == column}) + 1, column)
+    
+    def count(disc: Disc): Int = positions count {_._1 == disc}
     
     def isEmpty: Boolean = positions isEmpty
     
-    def contains(position: Position): Boolean =
-        positions forall {
-            _._2 != position
-        }
+    def isColumnFull(column: Int): Boolean =
+        (positions count {_._2.y == column}) == rows
+    
+    def isColumnValid(column: Int): Boolean =
+        0 until columns contains column
 }
