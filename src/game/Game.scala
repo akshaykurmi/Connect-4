@@ -1,8 +1,9 @@
 package game
 
-import game.Disc.{Disc, RED, YELLOW}
+import game.Disc.{Disc, BLUE, YELLOW}
 
-class Game {
+
+class Game(playerRed: Player, playerYellow: Player) {
     
     def makeMove(board: Board, column: Int, disc: Disc): Board = (board, column) match {
         case (b, c) if b isColumnFull c => b
@@ -11,7 +12,12 @@ class Game {
         case (b, _) => b
     }
     
-    def currentPlayer(board: Board): Disc = board match {
+    def currentPlayer(board: Board): Player = currentDisc(board) match {
+        case BLUE => playerRed
+        case YELLOW => playerYellow
+    }
+    
+    def currentDisc(board: Board): Disc = board match {
         case b if b isEmpty => BLUE
         case b if b.count(BLUE) > b.count(YELLOW) => YELLOW
         case _ => BLUE
