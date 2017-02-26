@@ -5,8 +5,8 @@ import game.Disc.Disc
 
 object Disc extends Enumeration {
     type Disc = Value
-    val RED = Value("RED")
-    val YELLOW = Value("YELLOW")
+    val BLUE = Value("B")
+    val YELLOW = Value("Y")
 }
 
 
