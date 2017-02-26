@@ -15,7 +15,7 @@ case class Position(x: Int, y: Int)
 case object Position {
     
     private def areConsecutive(numbers: List[Int]): Boolean =
-        numbers.length == ((((numbers sorted) sliding 2) map(a => a.last - a.head)) count {_ == 1})
+        numbers.length - 1 == ((((numbers sorted) sliding 2) map(a => a.last - a.head)) count {_ == 1})
     
     private def areHorizontal(positions: List[Position]): Boolean =
         (positions forall {_.y == positions.head.y}) &&
