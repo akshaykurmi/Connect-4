@@ -12,16 +12,16 @@ class Game {
     }
     
     def currentPlayer(board: Board): Disc = board match {
-        case b if b isEmpty => RED
-        case b if b.count(RED) > b.count(YELLOW) => YELLOW
-        case _ => RED
+        case b if b isEmpty => BLUE
+        case b if b.count(BLUE) > b.count(YELLOW) => YELLOW
+        case _ => BLUE
     }
     
     def hasWon(board: Board, disc: Disc): Boolean = {
         Position check4InARow (board getPositionsWith disc)
     }
     
-    def isGameDraw(board: Board): Boolean = {
-        (board isFull) && !hasWon(board, RED) && !hasWon(board, YELLOW)
+    def isGameOver(board: Board): Boolean = {
+        hasWon(board, BLUE) || hasWon(board, YELLOW) || (board isFull)
     }
 }
