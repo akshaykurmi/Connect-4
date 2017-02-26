@@ -15,19 +15,20 @@ case class Position(x: Int, y: Int)
 case object Position {
     
     private def areConsecutive(numbers: List[Int]): Boolean =
-        numbers.length - 1 == ((((numbers sorted) sliding 2) map(a => a.last - a.head)) count {_ == 1})
+        (numbers.length - 1 == (((numbers sliding 2) map(a => a.last - a.head)) count {_ == 1})) ||
+            numbers.length - 1 == (((numbers sliding 2) map(a => a.last - a.head)) count {_ == -1})
     
     private def areHorizontal(positions: List[Position]): Boolean =
         (positions forall {_.y == positions.head.y}) &&
-            areConsecutive(positions map {_.x})
+            areConsecutive((positions map {_.x}) sorted)
     
     private def areVertical(positions: List[Position]): Boolean =
         (positions forall {_.x == positions.head.x}) &&
-            areConsecutive(positions map {_.y})
+            areConsecutive((positions map {_.y}) sorted)
     
     private def areDiagonal(positions: List[Position]): Boolean =
-        areConsecutive(positions map {_.y}) &&
-            areConsecutive(positions map {_.x})
+        areConsecutive((positions sortBy {_.x}) map {_.x}) &&
+            areConsecutive((positions sortBy {_.x}) map {_.y})
     
     private def checkInARow(positions: List[Position]): Boolean =
         areHorizontal(positions) || areVertical(positions) || areDiagonal(positions)
