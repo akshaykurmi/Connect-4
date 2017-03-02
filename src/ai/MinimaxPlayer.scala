@@ -9,35 +9,33 @@ import scala.util.Random
 class MinimaxPlayer(name: String) extends Player(name) {
     
     override def getMove(board: Board): Int =
-        Random.shuffle({
-            board.availableMoves.map{
+        Random.shuffle(
+            board.availableMoves.map {
                 move => move -> minimax(board.currentDisc, board.makeMove(move, board.currentDisc))
             }
-        }).maxBy(_._2)._1
+        ).maxBy(_._2)._1
     
     private def minimax(myDisc: Disc, board: Board): Int =
         minimize(myDisc, board, 0, Integer.MIN_VALUE, Integer.MAX_VALUE)
     
     private def minimize(myDisc: Disc, board: Board, depth: Int, alpha: Int, beta: Int): Int = {
         if (board.isGameOver || depth == 5) return score(board, myDisc, depth)
-        var newBeta = beta
-        board.availableMoves.foreach(move => {
-            val newState = board.makeMove(move, board.currentDisc)
-            newBeta = math.min(beta, maximize(myDisc, newState, depth + 1, alpha, newBeta))
+        board.availableMoves.foldLeft(beta)((b, move) => {
+            val newBoard = board.makeMove(move, board.currentDisc)
+            val newBeta = math.min(b, maximize(myDisc, newBoard, depth + 1, alpha, b))
             if (alpha >= newBeta) return alpha
+            newBeta
         })
-        newBeta
     }
     
     private def maximize(myDisc: Disc, board: Board, depth: Int, alpha: Int, beta: Int): Int = {
         if (board.isGameOver || depth == 5) return score(board, myDisc, depth)
-        var newAlpha = alpha
-        board.availableMoves.foreach(move => {
-            val newState = board.makeMove(move, board.currentDisc)
-            newAlpha = math.max(newAlpha, minimize(myDisc, newState, depth + 1, newAlpha, beta))
+        board.availableMoves.foldLeft(alpha)((a, move) => {
+            val newBoard = board.makeMove(move, board.currentDisc)
+            val newAlpha = math.max(a, minimize(myDisc, newBoard, depth + 1, a, beta))
             if (newAlpha >= beta) return beta
+            newAlpha
         })
-        newAlpha
     }
     
     def score(board: Board, myDisc: Disc, depth: Int): Int =
