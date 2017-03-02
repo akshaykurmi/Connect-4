@@ -73,7 +73,7 @@ case class Board(rows: Int, columns: Int, positions: List[(Disc, Position)],
         ((0 until columns) filter (!isColumnFull(_))) toList
     
     def currentDisc: Disc =
-        if (count(BLUE) > count(YELLOW)) BLUE else YELLOW
+        if (count(BLUE) == count(YELLOW)) BLUE else YELLOW
     
     def hasWon(disc: Disc): Boolean =
         Position check4InARow getPositionsWith(disc)
@@ -81,11 +81,10 @@ case class Board(rows: Int, columns: Int, positions: List[(Disc, Position)],
     def isGameOver: Boolean =
         hasWon(BLUE) || hasWon(YELLOW) || isFull
     
-    def winningPlayer: Option[Player] = {
+    def winningPlayer: Option[Player] =
         if (hasWon(BLUE)) Some(playerBlue)
         else if (hasWon(YELLOW)) Some(playerYellow)
         else None
-    }
     
     def currentPlayer: Player = currentDisc match {
         case BLUE => playerBlue
