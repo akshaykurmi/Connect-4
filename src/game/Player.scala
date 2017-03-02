@@ -1,6 +1,6 @@
 package game
 
 abstract class Player(name: String) {
-    def getMove: Int
+    def getMove(board: Board): Int
     override def toString: String = name
 }

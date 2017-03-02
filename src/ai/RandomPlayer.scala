@@ -1,8 +1,10 @@
 package ai
 
-import game.Player
+import game.{Board, Player}
+
 import scala.util.Random
 
+
 class RandomPlayer(name: String) extends Player(name) {
-    override def getMove: Int = Random.nextInt(7)
+    override def getMove(board: Board): Int = Random.nextInt(7)
 }

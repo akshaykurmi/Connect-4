@@ -1,12 +1,19 @@
 package game
 
 import game.Disc.Disc
+import game.Disc.BLUE
+import game.Disc.YELLOW
 
 
 object Disc extends Enumeration {
     type Disc = Value
     val BLUE = Value("B")
     val YELLOW = Value("Y")
+    
+    def otherDisc(disc: Disc): Disc = disc match {
+        case BLUE => YELLOW
+        case YELLOW => BLUE
+    }
 }
 
 
@@ -39,7 +46,8 @@ case object Position {
 }
 
 
-case class Board(rows: Int, columns: Int, positions: List[(Disc, Position)]) {
+case class Board(rows: Int, columns: Int, positions: List[(Disc, Position)],
+                 playerBlue: Player, playerYellow: Player) {
     def isFull: Boolean =
         positions.length == rows * columns
     
@@ -59,5 +67,32 @@ case class Board(rows: Int, columns: Int, positions: List[(Disc, Position)]) {
         (positions count {_._2.y == column}) == rows
     
     def isColumnValid(column: Int): Boolean =
-        0 until columns contains column
+        !isColumnFull(column) && (0 until columns contains column)
+    
+    def availableMoves: List[Int] =
+        ((0 until columns) filter (!isColumnFull(_))) toList
+    
+    def currentDisc: Disc =
+        if (count(BLUE) > count(YELLOW)) BLUE else YELLOW
+    
+    def hasWon(disc: Disc): Boolean =
+        Position check4InARow getPositionsWith(disc)
+    
+    def isGameOver: Boolean =
+        hasWon(BLUE) || hasWon(YELLOW) || isFull
+    
+    def winningPlayer: Option[Player] = {
+        if (hasWon(BLUE)) Some(playerBlue)
+        else if (hasWon(YELLOW)) Some(playerYellow)
+        else None
+    }
+    
+    def currentPlayer: Player = currentDisc match {
+        case BLUE => playerBlue
+        case YELLOW => playerYellow
+    }
+    
+    def makeMove(column: Int, disc: Disc): Board =
+        if (!isColumnValid(column)) this
+        else Board(rows, columns, (disc, nextPositionInColumn(column)) :: positions, playerBlue, playerYellow)
 }

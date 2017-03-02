@@ -20,26 +20,19 @@ object ConsoleApp {
         case YELLOW => Console.YELLOW + 0x2B24.toChar
     }
     
-    def play(g: Game, playerRed: Player, playerYellow: Player): Option[Player] = {
-        var board = Board(6, 7, Nil)
-        while (!g.isGameOver(board)) {
-            println(stringifyBoard(board))
-            board = g.makeMove(board, g.currentPlayer(board).getMove, g.currentDisc(board))
-        }
+    def play(board: Board): Option[Player] = {
         println(stringifyBoard(board))
-        if (g.hasWon(board, BLUE)) Some(playerRed)
-        else if (g.hasWon(board, YELLOW)) Some(playerYellow)
-        else None
+        if (board.isGameOver) board.winningPlayer
+        else play(board.makeMove(board.currentPlayer.getMove(board), board.currentDisc))
     }
     
     def main(args: Array[String]): Unit = {
         print("Enter Player 1's name : ")
-        val playerRed = new HumanConsolePlayer(scala.io.StdIn.readLine())
+        val playerBlue = new HumanConsolePlayer(scala.io.StdIn.readLine())
         print("Enter Player 2's name : ")
         val playerYellow = new HumanConsolePlayer(scala.io.StdIn.readLine())
-        val game = new Game(playerRed, playerYellow)
         
-        val player = play(game, playerRed, playerYellow)
+        val player = play(Board(6, 7, Nil, playerBlue, playerYellow))
         
         if (player.isDefined) println(player.get + " has won!")
         else println("The match is a draw")
@@ -51,7 +44,7 @@ object ConsoleApp {
 class HumanConsolePlayer(name: String) extends Player(name) {
     def prompt: String = Console.WHITE + name + ", select a column to drop the disc in : "
     
-    override def getMove: Int = {
+    override def getMove(board: Board): Int = {
         print(prompt)
         scala.io.StdIn.readInt()
     }
