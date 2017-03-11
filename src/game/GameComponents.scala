@@ -37,9 +37,9 @@ case object Position {
              Position(position.x+3, position.y+3))
     
     def minorDiagonalPositions(position: Position): List[Position] =
-        List(Position(position.x-1, position.y-1),
-             Position(position.x-2, position.y-2),
-             Position(position.x-3, position.y-3))
+        List(Position(position.x-1, position.y+1),
+             Position(position.x-2, position.y+2),
+             Position(position.x-3, position.y+3))
     
     def check4InARow(positions: List[Position]): Boolean =
         positions.foldLeft(false)((bool, position) => {
