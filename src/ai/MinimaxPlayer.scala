@@ -19,7 +19,7 @@ class MinimaxPlayer(name: String) extends Player(name) {
         minimize(myDisc, board, 0, Integer.MIN_VALUE, Integer.MAX_VALUE)
     
     private def minimize(myDisc: Disc, board: Board, depth: Int, alpha: Int, beta: Int): Int = {
-        if (board.isGameOver || depth == 5) return score(board, myDisc, depth)
+        if (board.isGameOver || depth == 6) return score(board, myDisc, depth)
         board.availableMoves.foldLeft(beta)((b, move) => {
             val newBoard = board.makeMove(move, board.currentDisc)
             val newBeta = math.min(b, maximize(myDisc, newBoard, depth + 1, alpha, b))
@@ -29,7 +29,7 @@ class MinimaxPlayer(name: String) extends Player(name) {
     }
     
     private def maximize(myDisc: Disc, board: Board, depth: Int, alpha: Int, beta: Int): Int = {
-        if (board.isGameOver || depth == 5) return score(board, myDisc, depth)
+        if (board.isGameOver || depth == 6) return score(board, myDisc, depth)
         board.availableMoves.foldLeft(alpha)((a, move) => {
             val newBoard = board.makeMove(move, board.currentDisc)
             val newAlpha = math.max(a, minimize(myDisc, newBoard, depth + 1, a, beta))

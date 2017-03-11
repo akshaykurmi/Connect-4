@@ -21,28 +21,34 @@ case class Position(x: Int, y: Int)
 
 case object Position {
     
-    private def areConsecutive(numbers: List[Int]): Boolean =
-        (numbers.length - 1 == (((numbers sliding 2) map(a => a.last - a.head)) count {_ == 1})) ||
-            numbers.length - 1 == (((numbers sliding 2) map(a => a.last - a.head)) count {_ == -1})
+    def horizontalPositions(position: Position): List[Position] =
+        List(Position(position.x+1, position.y),
+             Position(position.x+2, position.y),
+             Position(position.x+3, position.y))
     
-    private def areHorizontal(positions: List[Position]): Boolean =
-        (positions forall {_.y == positions.head.y}) &&
-            areConsecutive((positions map {_.x}) sorted)
+    def verticalPositions(position: Position): List[Position] =
+        List(Position(position.x, position.y+1),
+             Position(position.x, position.y+2),
+             Position(position.x, position.y+3))
     
-    private def areVertical(positions: List[Position]): Boolean =
-        (positions forall {_.x == positions.head.x}) &&
-            areConsecutive((positions map {_.y}) sorted)
+    def majorDiagonalPositions(position: Position): List[Position] =
+        List(Position(position.x+1, position.y+1),
+             Position(position.x+2, position.y+2),
+             Position(position.x+3, position.y+3))
     
-    private def areDiagonal(positions: List[Position]): Boolean =
-        areConsecutive((positions sortBy {_.x}) map {_.x}) &&
-            areConsecutive((positions sortBy {_.x}) map {_.y})
-    
-    private def checkInARow(positions: List[Position]): Boolean =
-        areHorizontal(positions) || areVertical(positions) || areDiagonal(positions)
+    def minorDiagonalPositions(position: Position): List[Position] =
+        List(Position(position.x-1, position.y-1),
+             Position(position.x-2, position.y-2),
+             Position(position.x-3, position.y-3))
     
     def check4InARow(positions: List[Position]): Boolean =
-        ((positions combinations 4) toList)
-            .foldLeft(false)((bool, list) => bool || checkInARow(list))
+        positions.foldLeft(false)((bool, position) => {
+            bool ||
+            horizontalPositions(position).forall(p => positions contains p) ||
+            verticalPositions(position).forall(p => positions contains p) ||
+            majorDiagonalPositions(position).forall(p => positions contains p) ||
+            minorDiagonalPositions(position).forall(p => positions contains p)
+        })
 }
 
 
