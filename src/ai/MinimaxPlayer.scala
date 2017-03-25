@@ -9,11 +9,9 @@ import scala.util.Random
 class MinimaxPlayer(name: String) extends Player(name) {
     
     override def getMove(board: Board): Int =
-        Random.shuffle(
-            board.availableMoves.map {
+        Random.shuffle(board.availableMoves.map {
                 move => move -> minimax(board.currentDisc, board.makeMove(move, board.currentDisc))
-            }
-        ).maxBy(_._2)._1
+            }).maxBy(_._2)._1
     
     private def minimax(myDisc: Disc, board: Board): Int =
         minimize(myDisc, board, 0, Integer.MIN_VALUE, Integer.MAX_VALUE)
@@ -38,7 +36,7 @@ class MinimaxPlayer(name: String) extends Player(name) {
         })
     }
     
-    def score(board: Board, myDisc: Disc, depth: Int): Int =
+    private def score(board: Board, myDisc: Disc, depth: Int): Int =
         if (board.hasWon(myDisc)) 100 - depth
         else if (board.hasWon(Disc.otherDisc(myDisc))) depth - 100
         else 0
