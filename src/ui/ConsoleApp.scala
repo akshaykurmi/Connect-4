@@ -1,8 +1,8 @@
 package ui
 
-import game.Disc.{Disc, BLUE, YELLOW}
+import game.Disc.{BLUE, Disc, YELLOW}
 import game._
-import ai.MinimaxPlayer
+import ai.{MinimaxPlayer, RLPlayer}
 
 object ConsoleApp {
     
@@ -29,9 +29,9 @@ object ConsoleApp {
     
     def main(args: Array[String]): Unit = {
         print("Enter Player 1's name : ")
-        val playerBlue = new HumanConsolePlayer(scala.io.StdIn.readLine())
+        val playerBlue = RLPlayer.createRLPlayer(scala.io.StdIn.readLine(), "rlplayertest.zip")
         print("Enter Player 2's name : ")
-        val playerYellow = new MinimaxPlayer(scala.io.StdIn.readLine())
+        val playerYellow = new HumanConsolePlayer(scala.io.StdIn.readLine())
         
         val player = play(Board(6, 7, Nil, playerBlue, playerYellow))
         
